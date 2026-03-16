@@ -78,13 +78,39 @@
             font-weight: bold;
             min-height: 50px;
         }
+		/* The Clear Button */
+		.clear-btn {
+			position: absolute;
+			right: 12px;
+			width: 24px;
+			height: 24px;
+			background-color: #ccc;
+			color: white;
+			border-radius: 50%;
+			border: none;
+			display: none; /* Hidden by default */
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			font-size: 14px;
+			font-weight: bold;
+			line-height: 1;
+		}
+		
+		/* Show button only when there is text */
+		input:not(:placeholder-shown) + .clear-btn {
+			display: flex;
+		}
     </style>
 </head>
 <body>
 
 <div class="search-container">
-    <input type="text" id="searchInput" placeholder="Search word or line (उदा. विठ्ठल)..." autocomplete="off">
-    <div id="searchStats" class="stats">Initializing collection...</div>
+	<div class="search-wrapper">
+		<input type="text" id="searchInput" placeholder="Search word or line (उदा. विठ्ठल)..." autocomplete="off">
+		<button id="clearButton" class="clear-btn" aria-label="Clear search">✕</button>
+	</div>
+	<div id="searchStats" class="stats">Initializing collection...</div>
 </div>
 
 <div id="results" class="results"></div>
@@ -4285,6 +4311,19 @@ function setupInfiniteScroll() {
     
     observer.observe(document.getElementById('loadMoreTrigger'));
 }
+
+const clearButton = document.getElementById('clearButton');
+
+// Add click event to clear input
+clearButton.addEventListener('click', () => {
+    searchInput.value = '';
+    searchInput.focus();
+    performSearch(''); // Refresh results to show all
+});
+
+// Optional: If you want to handle the 'X' appearing/disappearing via JS 
+// instead of just CSS, you can toggle it inside handleSearchInput.
+
 
 // Run app
 createSearchIndex();
